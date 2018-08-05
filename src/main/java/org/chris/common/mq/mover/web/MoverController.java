@@ -21,6 +21,6 @@ public class MoverController {
     private CommonMoverService commonMoverService;
     @RequestMapping("/move")
     public void move(@RequestBody MoveInfo moveInfo) throws Exception {
-        commonMoverService.move(moveInfo);
+        commonMoverService.moveMsg(moveInfo);
     }
 }

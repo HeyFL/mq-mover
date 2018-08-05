@@ -20,26 +20,22 @@ public class CommonMoverService implements MoveService {
     @Qualifier("commonMQConnectionFactory")
     private ConnectionFactory connectionFactory;
 
-
-    //@Value("${consume.queue.name}")
-    //private String queueName;
-
-
     @Resource(name = "pfsPickupSyncTemplate")
     private RabbitTemplate rabbitTemplate;
 
-    public void send(String msg, String toExchange, String toRoutingKey) {
-        rabbitTemplate.convertAndSend(toExchange, toRoutingKey, msg);
-    }
-
-
+    /**
+     * 转移消息
+     *
+     * @param moveInfo
+     * @throws Exception
+     */
     @Override
-    public void move(MoveInfo moveInfo) throws Exception {
+    public void moveMsg(MoveInfo moveInfo) throws Exception {
 
-
-        boolean isReject = true;
+        //是否成功消费
+        boolean isConsumerSuccess = false;
+        //是否获取到消息标识,没获取到时为0L
         long deliveryTag = 0L;
-
 
         //连接rabbit
         Channel channel = getChannel() ;
@@ -52,7 +48,7 @@ public class CommonMoverService implements MoveService {
 
                 //转发消息
                 send(resStr, moveInfo.getToExchange(), moveInfo.getToRoutingKey());
-                isReject = false;
+                isConsumerSuccess = true;
 
                 //确认消息
                 channel.basicAck(deliveryTag, false);
@@ -63,7 +59,7 @@ public class CommonMoverService implements MoveService {
                 throw e;
             } finally {
                 //获取到消息 并且 没有成功消费
-                if (isReject && deliveryTag != 0L) {
+                if (isConsumerSuccess == false && deliveryTag != 0L) {
                     channel.basicReject(deliveryTag, false);
                 }
             }
@@ -80,5 +76,16 @@ public class CommonMoverService implements MoveService {
             throw e;
         }
         return channel;
+    }
+
+    /**
+     * 发送消息
+     *
+     * @param msg
+     * @param toExchange
+     * @param toRoutingKey
+     */
+    private void send(String msg, String toExchange, String toRoutingKey) {
+        rabbitTemplate.convertAndSend(toExchange, toRoutingKey, msg);
     }
 }

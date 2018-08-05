@@ -28,7 +28,6 @@ public class RabbitMqConfig {
      * @param virtualHost
      * @return
      */
-
     @Bean
     public ConnectionFactory commonMQConnectionFactory(
             @Value("${spring.rabbitmq.default.addresses}") String addresses,
@@ -45,7 +44,6 @@ public class RabbitMqConfig {
     @Scope("prototype")
     public RabbitTemplate pfsPickupSyncTemplate(@Qualifier("commonMQConnectionFactory") ConnectionFactory connectionFactory) {
         RabbitTemplate template = new RabbitTemplate(connectionFactory);
-        //template.setExchange("PFS_PICKUP_X_PREDICT");
         return template;
     }
 
