@@ -9,13 +9,18 @@ import org.chris.common.mq.mover.service.MoveService;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 
+/**
+ * @author caizq
+ */
 @Slf4j
+@Scope("prototype")
 @Component
-public class CommonMoverService implements MoveService {
+public class CommonMoverServiceImpl implements MoveService {
     @Resource
     @Qualifier("commonMQConnectionFactory")
     private ConnectionFactory connectionFactory;

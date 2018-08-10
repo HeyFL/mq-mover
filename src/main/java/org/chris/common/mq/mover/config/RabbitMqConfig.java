@@ -22,6 +22,8 @@ public class RabbitMqConfig {
 
 
     /**
+     * 注解 @Scope("prototype") 可以令你你动态修改的配置生效
+     * the @Scope is important that allows you change collection config dynamically when you request
      * @param addresses
      * @param username
      * @param password
@@ -29,6 +31,7 @@ public class RabbitMqConfig {
      * @return
      */
     @Bean
+    @Scope("prototype")
     public ConnectionFactory commonMQConnectionFactory(
             @Value("${spring.rabbitmq.default.addresses}") String addresses,
             @Value("${spring.rabbitmq.default.username}") String username,
