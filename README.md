@@ -5,9 +5,9 @@
 请求报文:
 ```
 {
-	"queue": "PFS_PICKUP_Q_PREDICT_DEAD",
-	"toExchange": "PFS_PICKUP_X_PREDICT",
-	"toRoutingKey": "PFS_PICKUP_R_PREDICT",
+	"queue": "PFS_PICKUP_Q_PREDICT_DEAD",//原队列
+	"toExchange": "PFS_PICKUP_X_PREDICT",//目的地队列Exchange
+	"toRoutingKey": "PFS_PICKUP_R_PREDICT",//目的地队地RoutingKey
 	"moveNum": 10
 }
 ```
