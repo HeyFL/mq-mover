@@ -7,7 +7,7 @@ import org.chris.common.mq.mover.domain.MoveInfo;
  * @date 2018/4/8
  * @since v1.0.0
  */
-public interface MoveService {
+public interface IMoveService {
     /**
      * 转移消息
      *

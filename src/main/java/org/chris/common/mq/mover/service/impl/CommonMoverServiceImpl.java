@@ -5,9 +5,11 @@ import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.GetResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.chris.common.mq.mover.domain.MoveInfo;
-import org.chris.common.mq.mover.service.MoveService;
+import org.chris.common.mq.mover.service.IMoveService;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Lookup;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -18,16 +20,25 @@ import javax.annotation.Resource;
  * @author caizq
  */
 @Slf4j
-@Scope("prototype")
 @Component
-public class CommonMoverServiceImpl implements MoveService {
-    @Resource
-    @Qualifier("commonMQConnectionFactory")
-    private ConnectionFactory connectionFactory;
+public class CommonMoverServiceImpl implements IMoveService {
 
-    @Resource(name = "pfsPickupSyncTemplate")
-    private RabbitTemplate rabbitTemplate;
-
+    /**
+     * prototype注入
+     * @return
+     */
+    @Lookup
+    public ConnectionFactory getConnectionFactory(){
+        return null;
+    }
+    /**
+     * prototype注入
+     * @return
+     */
+    @Lookup
+    public RabbitTemplate getRabbitTemplate(){
+        return null;
+    }
     /**
      * 转移消息
      *
@@ -75,7 +86,7 @@ public class CommonMoverServiceImpl implements MoveService {
         Channel channel;
         try{
             //连接rabbit
-            channel = connectionFactory.createConnection().createChannel(false);
+            channel = getConnectionFactory().createConnection().createChannel(false);
         }catch (Exception e){
             log.error("获取rabbit连接失败:{}",e);
             throw e;
@@ -91,6 +102,6 @@ public class CommonMoverServiceImpl implements MoveService {
      * @param toRoutingKey
      */
     private void send(String msg, String toExchange, String toRoutingKey) {
-        rabbitTemplate.convertAndSend(toExchange, toRoutingKey, msg);
+        getRabbitTemplate().convertAndSend(toExchange, toRoutingKey, msg);
     }
 }

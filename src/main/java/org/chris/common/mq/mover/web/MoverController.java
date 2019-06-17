@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
  * @date 2018/4/20
  * @since v1.0.0
  */
-@Scope("prototype")
 @RestController
 public class MoverController {
     @Autowired
